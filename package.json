@@ -1,0 +1,41 @@
+{
+  "name": "authentication-microservice",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "test",
+    "build": "cross-env NODE_ENV=production webpack --color --progress",
+    "dev": "cross-env NODE_ENV=development webpack --watch"
+  },
+  "author": "VasiliyTemniy",
+  "license": "MIT",
+  "description": "Microservice that handles user action authentication using partial RBAC, ReBAC and ABAC approach",
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.13.9",
+    "@types/pg": "^8.11.11",
+    "@types/webpack": "^5.28.5",
+    "@types/webpack-node-externals": "^3.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "cross-env": "^7.0.3",
+    "esbuild-loader": "^4.3.0",
+    "eslint": "^9.22.0",
+    "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "globals": "^16.0.0",
+    "nodemon": "^3.1.9",
+    "nodemon-webpack-plugin": "^4.8.2",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
+    "pg": "^8.13.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.21"
+  }
+}
