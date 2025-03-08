@@ -1,0 +1,4 @@
+[submodule "src/submodules/micro-std-response"]
+	path = src/submodules/micro-std-response
+	url = https://github.com/VasiliyTemniy/micro-std-response.git
+	branch = main
