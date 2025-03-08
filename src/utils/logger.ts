@@ -73,6 +73,10 @@ export class CLoggerColored extends CLogger {
     noColor: '\x1b[0m'
   }
 
+  constructor(scope: string) {
+    super(scope);
+  }
+
   protected print(level: 'INFO ' | 'WARN ' | 'ERROR' | 'DEBUG', operation: string, ...args: TLoggable[]) {
     const text = JSON.stringify([...args], null, '  ');
     console.log(this.colors.background[level], level, this.colors.noColor, this.colors.foreground[level], getTimestamp(), super.scope, operation, this.colors.noColor);
