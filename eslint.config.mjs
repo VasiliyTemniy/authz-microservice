@@ -30,6 +30,12 @@ export default tseslint.config(
           'argsIgnorePattern': '^_'
         }
       ],
+      '@typescript-eslint/no-unused-imports': [
+        'error',
+        {
+          'argsIgnorePattern': '^_'
+        }
+      ],
       '@typescript-eslint/no-explicit-any': 1,
       'no-case-declarations': 0,
       'indent': [
