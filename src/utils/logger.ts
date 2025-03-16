@@ -1,3 +1,4 @@
+import { LogLevel } from '../enums';
 import { config } from '../config';
 import { getTimestamp } from './date';
 
@@ -10,80 +11,139 @@ type TLoggable =
   object |
   null |
   undefined |
+  unknown |
   TLoggable[] |
   { [key: string]: TLoggable };
 
+type TLogLevel = 'FATAL' | 'ERROR' | 'WARN' | 'INFO' | 'DEBUG' | 'TRACE';
+type TLogLevelOrSilent = TLogLevel | 'SILENT';
+
 export interface ILogger {
-  info(...args: TLoggable[]): void;
-  warn(...args: TLoggable[]): void;
+  level: TLogLevelOrSilent;
+  fatal(...args: TLoggable[]): void;
   error(...args: TLoggable[]): void;
+  warn(...args: TLoggable[]): void;
+  info(...args: TLoggable[]): void;
   debug(...args: TLoggable[]): void;
+  trace(...args: TLoggable[]): void;
+  silent(...args: TLoggable[]): void;
+  child(): ILogger;
 }
 
 export class CLogger implements ILogger {
-  constructor(protected scope: string) {
+  public scope: string;
+  public level: TLogLevelOrSilent;
+  private numLevel: LogLevel;
+
+  constructor({
+    scope,
+    level
+  } : {
+    scope?: string,
+    level?: TLogLevelOrSilent
+  }) {
     this.scope = scope ?? 'global';
+    this.level = level ?? 'INFO';
+    this.numLevel = LogLevel[this.level];
   }
-  
-  info(operation: string, ...args: TLoggable[]) {
-    if ( IS_TEST ) return;
-    this.print('INFO ', operation, ...args);
-  }
-  
-  warn(operation: string, ...args: TLoggable[]) {
-    if ( IS_TEST ) return;
-    this.print('WARN ', operation, ...args);
+
+  fatal(operation: string, ...args: TLoggable[]) {
+    if ( this.numLevel < LogLevel.FATAL ) return;
+    this.print('FATAL', operation, ...args);
   }
   
   error(operation: string, ...args: TLoggable[]) {
-    if ( IS_TEST ) return;
+    if ( IS_TEST || this.numLevel < LogLevel.ERROR ) return;
     this.print('ERROR', operation, ...args);
+  }
+
+  warn(operation: string, ...args: TLoggable[]) {
+    if ( IS_TEST || this.numLevel < LogLevel.WARN ) return;
+    this.print('WARN', operation, ...args);
+  }
+  
+  info(operation: string, ...args: TLoggable[]) {
+    if ( IS_TEST || this.numLevel < LogLevel.INFO ) return;
+    this.print('INFO', operation, ...args);
   }
   
   debug(operation: string, ...args: TLoggable[]) {
-    if ( !DEBUG.COMMON ) return;
+    if ( !DEBUG.COMMON || this.numLevel < LogLevel.DEBUG ) return;
     this.print('DEBUG', operation, ...args);
   }
+
+  trace(operation: string, ...args: TLoggable[]) {
+    if ( !DEBUG.COMMON || !DEBUG.TRACE || this.numLevel < LogLevel.TRACE ) return;
+    this.print('TRACE', operation, ...args);
+  }
+
+  silent(operation: string, ...args: TLoggable[]) {
+    // if ( IS_TEST ) return;
+    // this.print('SILENT', '', ...args);
+  }
   
-  protected print(level: 'INFO ' | 'WARN ' | 'ERROR' | 'DEBUG', operation: string, ...args: TLoggable[]) {
-    const text = JSON.stringify([...args], null, '  ');
-    console.log(level, getTimestamp(), this.scope, operation);
-    if (text.length > 8) {
-      console.log(text);
-    } else {
-      console.log('[\n  ', ...args, '\n]');
-    }
+  protected print(level: Uppercase<TLogLevel>, operation: string, ...args: TLoggable[]) {
+    console.log(level, getTimestamp(), this.scope + '.' + operation, '[\n  ', ...args, '\n]');
+  }
+
+  child() {
+    return new CLogger({
+      scope: this.scope,
+      level: this.level
+    });
   }
 }
 
 export class CLoggerColored extends CLogger {
   private colors = {
     background: {
-      'INFO ': '\x1b[44m',
-      'WARN ': '\x1b[43m',
+      'FATAL': '\x1b[41m',
       'ERROR': '\x1b[41m',
+      'WARN': '\x1b[43m',
+      'INFO': '\x1b[44m',
       'DEBUG': '\x1b[100m',
+      'TRACE': '\x1b[100m',
     },
     foreground: {
-      'INFO ': '\x1b[34m',
-      'WARN ': '\x1b[33m',
+      'FATAL': '\x1b[31m',
       'ERROR': '\x1b[31m',
+      'WARN': '\x1b[33m',
+      'INFO': '\x1b[34m',
       'DEBUG': '\x1b[90m',
+      'TRACE': '\x1b[90m',
     },
     noColor: '\x1b[0m'
   }
 
-  constructor(scope: string) {
-    super(scope);
+  constructor({
+    scope,
+    level
+  } : {
+    scope?: string,
+    level?: TLogLevelOrSilent
+  }) {
+    super({ scope, level });
   }
 
-  protected print(level: 'INFO ' | 'WARN ' | 'ERROR' | 'DEBUG', operation: string, ...args: TLoggable[]) {
-    const text = JSON.stringify([...args], null, '  ');
-    console.log(this.colors.background[level], level, this.colors.noColor, this.colors.foreground[level], getTimestamp(), super.scope, operation, this.colors.noColor);
-    if (text.length > 8) {
-      console.log(text);
-    } else {
-      console.log('[\n  ', ...args, '\n]');
-    }
+  protected print(level: Uppercase<TLogLevel>, operation: string, ...args: TLoggable[]) {
+    console.log(
+      this.colors.background[level],
+      level,
+      this.colors.noColor,
+      this.colors.foreground[level],
+      getTimestamp(),
+      this.scope + '.' + operation,
+      this.colors.noColor,
+      '[\n  ',
+      ...args,
+      '\n]'
+    );
+  }
+
+  child() {
+    return new CLoggerColored({
+      scope: this.scope,
+      level: this.level
+    });
   }
 }
