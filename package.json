@@ -9,7 +9,7 @@
     "test": "test",
     "build": "cross-env NODE_ENV=production webpack --color --progress",
     "dev": "cross-env NODE_ENV=development webpack --watch",
-    "submodules:update": "git submodule update --init --recursive"
+    "submodules:update": "git submodule update --init --remote --merge --recursive"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
