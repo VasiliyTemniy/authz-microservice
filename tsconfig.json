@@ -14,7 +14,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "newLine": "LF",
-    "composite": true
+    "composite": true,
+    "baseUrl": "./src"
   },
   "exclude": [
     "node_modules/*"
