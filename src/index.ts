@@ -1,20 +1,18 @@
-import { config as _config } from './config';
+import { config } from './config';
+import { HTTPServerFastify } from './server/http';
+import { CLogger, CLoggerColored } from './utils/logger';
 
-// Import the framework and instantiate it
-import Fastify from 'fastify';
-const fastify = Fastify({
-  logger: true
-});
+const ChosenCLogger = config.LOGGER.COLORED
+  ? CLoggerColored
+  : CLogger;
 
-// Declare a route
-fastify.get('/', async function handler (_req, _res) {
-  return { hello: 'world' };
-});
+const httpServer = new HTTPServerFastify(
+  new ChosenCLogger({ scope: 'http', level: config.LOGGER.LEVEL })
+);
 
-// Run the server!
-try {
-  await fastify.listen({ port: 3000 });
-} catch (err) {
-  fastify.log.error(err);
-  process.exit(1);
-}
+const bootstrap = async () => {
+  await httpServer.listen({ port: config.PORT, host: '127.0.0.1' });
+  await httpServer.init();
+};
+
+void bootstrap();
