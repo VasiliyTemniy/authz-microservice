@@ -2,3 +2,6 @@
 	path = src/submodules/micro-std-response
 	url = https://github.com/VasiliyTemniy/micro-std-response.git
 	branch = main
+[submodule "src/submodules/authz-microservice-types"]
+	path = src/submodules/authz-microservice-types
+	url = https://github.com/VasiliyTemniy/authz-microservice-types.git
