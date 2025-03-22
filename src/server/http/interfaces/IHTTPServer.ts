@@ -1,27 +1,18 @@
-import type { IAPIResponse } from "submodules/micro-std-response/js";
+import type { THTTPRequest, THTTPResponse } from 'src/utils';
 
-export type THTTPServerListenOptions = {
+export interface THTTPServerListenOptions {
   port: number;
   host?: string;
   path?: string;
-};
+}
 
-export type THTTPServerRouteOptions = {
+export interface THTTPServerRouteOptions {
   path: string;
-};
+}
 
-export type THTTPServerGenericRouteOptions = {
+export interface THTTPServerGenericRouteOptions {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
-};
-
-export type THTTPRequest = {
-  body: unknown;
-};
-
-export type THTTPResponse = {
-  status: (code: number) => THTTPResponse;
-  send: (data: IAPIResponse) => THTTPResponse;
 }
 
 export type THTTPServerRouteHandler = (req: THTTPRequest, res: THTTPResponse) => Promise<void>;

@@ -1,11 +1,11 @@
-import type { ILogger } from "../../../utils";
-import type { IHTTPServer, THTTPServerGenericRouteOptions, THTTPServerListenOptions, THTTPServerRouteHandler, THTTPServerRouteOptions } from "../interfaces/IHTTPServer";
+import type { ILogger } from 'src/utils';
+import type { IHTTPServer, THTTPServerGenericRouteOptions, THTTPServerListenOptions, THTTPServerRouteHandler, THTTPServerRouteOptions } from '../interfaces/IHTTPServer';
 import Fastify, { type FastifyInstance } from 'fastify';
 
 export class HTTPServerFastify implements IHTTPServer {
   private fastify: FastifyInstance;
 
-  constructor(private logger: ILogger) {
+  constructor(readonly logger: ILogger) {
     this.fastify = Fastify();
   }
 
