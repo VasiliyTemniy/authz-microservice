@@ -6,13 +6,21 @@
   "license": "MIT",
   "description": "Microservice that handles user action authentication using partial RBAC, ReBAC and ABAC approach",
   "scripts": {
-    "test": "test",
+    "test:first": "cross-env NODE_ENV=test JEST_TESTS=first jest --forceExit",
+    "test:sequential": "cross-env NODE_ENV=test JEST_TESTS=sequential jest --forceExit",
+    "test:parallel": "cross-env NODE_ENV=test JEST_TESTS=parallel jest --forceExit",
+    "test:last": "cross-env NODE_ENV=test JEST_TESTS=last jest --forceExit",
+    "test:all-in-one-run": "cross-env NODE_ENV=test JEST_TESTS=all jest --forceExit",
+    "test": "npm run test:first & npm run test:sequential & npm run test:parallel & npm run test:last",
     "build": "cross-env NODE_ENV=production webpack --color --progress",
     "dev": "cross-env NODE_ENV=development webpack --watch",
+    "lint": "eslint ./src --ext .ts",
+    "lint:fix": "eslint ./src --ext .ts --fix",
     "submodules:update": "git submodule update --init --remote --merge --recursive"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.9",
     "@types/pg": "^8.11.11",
     "@types/webpack": "^5.28.5",
@@ -24,8 +32,10 @@
     "eslint": "^9.22.0",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "globals": "^16.0.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "nodemon-webpack-plugin": "^4.8.2",
+    "ts-jest": "^29.2.6",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0",
     "webpack": "^5.98.0",
@@ -36,6 +46,7 @@
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
     "pg": "^8.13.3",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.21"
   }
