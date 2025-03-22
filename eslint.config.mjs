@@ -5,6 +5,16 @@ import tseslint from 'typescript-eslint';
 import globals from 'globals';
 
 export default tseslint.config(
+  {
+    ignores: [
+      'node_modules',
+      'dist',
+      'build',
+      'coverage',
+      'public',
+      'src/submodules'
+    ]
+  },
   eslint.configs.recommended,
   tseslint.configs.strict,
   tseslint.configs.stylistic,
@@ -70,9 +80,6 @@ export default tseslint.config(
           'arraysInObjects': true
         }
       ]
-    },
-    ignores: [
-      'src/submodules/**/*'
-    ]
+    }
   }
 );
