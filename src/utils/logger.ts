@@ -26,7 +26,6 @@ export interface ILogger {
   info(...args: TLoggable[]): void;
   debug(...args: TLoggable[]): void;
   trace(...args: TLoggable[]): void;
-  silent(...args: TLoggable[]): void;
   child(): ILogger;
 }
 
@@ -76,11 +75,6 @@ export class CLogger implements ILogger {
     if ( !DEBUG.COMMON || !DEBUG.TRACE || this.numLevel < LogLevel.TRACE ) return;
     this.print('TRACE', operation, ...args);
   }
-
-  silent(operation: string, ...args: TLoggable[]) {
-    // if ( IS_TEST ) return;
-    // this.print('SILENT', '', ...args);
-  }
   
   protected print(level: Uppercase<TLogLevel>, operation: string, ...args: TLoggable[]) {
     console.log(level, getTimestamp(), this.scope + '.' + operation, '[\n  ', ...args, '\n]');
@@ -113,7 +107,7 @@ export class CLoggerColored extends CLogger {
       'TRACE': '\x1b[90m',
     },
     noColor: '\x1b[0m'
-  }
+  };
 
   constructor({
     scope,
