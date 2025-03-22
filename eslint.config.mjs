@@ -11,7 +11,8 @@ export default tseslint.config(
   {
     languageOptions: {
       globals: {
-        ...globals.node
+        ...globals.node,
+        ...globals.jest
       }
     },
     rules: {
@@ -30,12 +31,7 @@ export default tseslint.config(
           'argsIgnorePattern': '^_'
         }
       ],
-      '@typescript-eslint/no-unused-imports': [
-        'error',
-        {
-          'argsIgnorePattern': '^_'
-        }
-      ],
+      '@typescript-eslint/array-type': 0,
       '@typescript-eslint/no-explicit-any': 1,
       'no-case-declarations': 0,
       'indent': [
@@ -75,5 +71,8 @@ export default tseslint.config(
         }
       ]
     },
+    ignores: [
+      'src/submodules/**/*'
+    ]
   }
 );
